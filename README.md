@@ -8,7 +8,7 @@ Download and install **FFMPEG** on your system and add it to the Environment Var
 
 ## How to install?
 
-1. download the [Export Video script](/Export%20Video.lua)
+1. download the [Export Video file](/Export%20Video.lua)
 2. open aseprite, File > Scripts > Open Scripts Folder
 3. paste the script in the folder that's opened
 
