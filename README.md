@@ -2,7 +2,7 @@
 
 this aseprite extension is for exporting animations to mp4 and mkv files.
 
-## Prerequisity
+## prerequisite
 
 Download and install **FFMPEG** on your system and add it to the Environment Variables. **You can check this tutorial for it**: https://phoenixnap.com/kb/ffmpeg-windows (not sponsored lmao)
 
