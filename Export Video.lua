@@ -90,7 +90,7 @@ dlg:button{
     onclick = function()
         local helpDlg = Dialog("Help!")
         helpDlg:label{
-            label = "go to github lol"
+            label = "go to github: https://github.com/zmn-hamid/Aseprite-Export-Video-Script"
         }
         helpDlg:show()
 
