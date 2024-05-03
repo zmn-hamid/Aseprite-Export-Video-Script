@@ -84,18 +84,17 @@ dlg:button{
         concatFile:close()
 
         -- Run ffmpeg command
-        local changeDirCommand = string.format("cd /d %s", saveDestination)
-        local ffmpegCommand = string.format(
-            "ffmpeg -f concat -safe 0 -y -i info.ffconcat -pix_fmt yuv420p -t 3.4 \"%s\"", saveTo)
-        os.execute(changeDirCommand .. " && " .. ffmpegCommand)
+        local ffmpegCommand = string.format("ffmpeg -f concat -safe 0 -y -i \"%s\" -pix_fmt yuv420p \"%s\"",
+            concatFilePath, saveTo)
+        os.execute(ffmpegCommand)
         if loopAmount > 0 then
             local loopSaveTo = string.gsub(saveTo, "(%w+)(%.%w+)$", "%1_loop%2")
             os.execute(string.format("ffmpeg -y -stream_loop %s -i \"%s\" -c copy \"%s\"", loopAmount, saveTo,
                 loopSaveTo))
         end
-
     end
 }
+
 dlg:button{
     id = "cancel",
     text = "Cancel",
