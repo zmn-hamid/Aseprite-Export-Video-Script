@@ -29,6 +29,13 @@ dlg:file{
     load = false,
     filetypes = {'mkv', 'mp4'}
 }
+dlg:newrow()
+dlg:number{
+    id = 'loopAmount',
+    label = 'Loop Number:',
+    text = "1",
+    decimals = integer
+}
 
 dlg:newrow()
 dlg:button{
@@ -39,6 +46,12 @@ dlg:button{
         local data = dlg.data
         local firstFramePath = data.firstFramePath
         local saveTo = data.saveTo
+        local loopAmount = data.loopAmount
+        if (math.type(loopAmount) ~= "integer") or (loopAmount < 1) then
+            app.alert('loop amout is wrong')
+            return
+        end
+        loopAmount = loopAmount - 1
 
         if not firstFramePath then
             return app.alert('you gotta choose a sample exported frame first')
@@ -75,6 +88,11 @@ dlg:button{
         local ffmpegCommand = string.format(
             "ffmpeg -f concat -safe 0 -y -i info.ffconcat -pix_fmt yuv420p -t 3.4 \"%s\"", saveTo)
         os.execute(changeDirCommand .. " && " .. ffmpegCommand)
+        if loopAmount > 0 then
+            local loopSaveTo = string.gsub(saveTo, "(%w+)(%.%w+)$", "%1_loop%2")
+            os.execute(string.format("ffmpeg -y -stream_loop %s -i \"%s\" -c copy \"%s\"", loopAmount, saveTo,
+                loopSaveTo))
+        end
 
     end
 }
@@ -90,7 +108,7 @@ dlg:button{
     onclick = function()
         local helpDlg = Dialog("Help!")
         helpDlg:label{
-            label = "go to github: https://github.com/zmn-hamid/Aseprite-Export-Video-Script"
+            label = "go to github lol"
         }
         helpDlg:show()
 

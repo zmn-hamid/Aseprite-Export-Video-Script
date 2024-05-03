@@ -23,3 +23,5 @@ Download and install **FFMPEG** on your system and add it to the Environment Var
 6. click "Export Video"
 7. wait a few seconds and check the folder you chose
 8. say thanks
+
+**Note**: You can make a looped animation by entering a number more than 1 in the "Loop Number" section
