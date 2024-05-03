@@ -2,6 +2,11 @@
 
 this aseprite extension is for exporting animations to mp4 and mkv files.
 
+### What's new?
+
+- Added option for looping. Enter a number more than 1 and the script would create a
+  new \_loop video file as well. Example: 2 equals playing the video twice (looping it once)
+
 ## Prerequisite
 
 Download and install **FFMPEG** on your system and add it to the Environment Variables. **You can check this guide too**: https://phoenixnap.com/kb/ffmpeg-windows (not sponsored lmao)
