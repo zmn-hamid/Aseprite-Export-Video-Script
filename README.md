@@ -30,3 +30,11 @@ Download and install **FFMPEG** on your system and add it to the Environment Var
 8. say thanks
 
 **Note**: You can make a looped animation by entering a number more than 1 in the "Loop Number" section
+
+## Log
+To get a log of FFMPEG (the video maker tool used for this project), copy the [conf.lua](conf.lua) file
+to the same directory where your aseprite file is, so each time a ffmpeg log error would be made. change
+the `true` to `false` if you want to prevent the logging (default is false, so you can remove the file too)
+
+**IMPORTANT NOTE**: Everytime you make changes to the `conf.lua` file, you gotta restart the whole app. That's
+just how it works unfortunately.

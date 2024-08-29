@@ -64,7 +64,15 @@ dlg:button{
         local ffconcatContent = "ffconcat version 1.0\n"
         local sprite = app.sprite
 
-        -- find concat patternstring.match(fullPath, "/([^/]-)$")
+        -- get the logging status
+        local ffmpeg_log = false
+        function loadconf()
+            local conf = require "conf"
+            ffmpeg_log = conf.log_ffmpeg
+        end
+        pcall(loadconf)
+
+        -- find concat pattern
         local sampleFileNameEXT = string.match(firstFramePath,
             string.format("%s([^%s]-)$", app.fs.pathSeparator, app.fs.pathSeparator))
         local framePrefix, frameNumber, frameExtension = string.match(sampleFileNameEXT, "(%a*)(%d+)(%.%w+)")
@@ -83,14 +91,19 @@ dlg:button{
         concatFile:write(ffconcatContent)
         concatFile:close()
 
+        -- get report argument's text
+        local report_text = ''
+        if ffmpeg_log == true then
+            report_text = ' -report'
+        end
+
         -- Run ffmpeg command
-        local ffmpegCommand = string.format("ffmpeg -f concat -safe 0 -y -i \"%s\" -pix_fmt yuv420p \"%s\"",
-            concatFilePath, saveTo)
+        local ffmpegCommand = string.format('ffmpeg -f concat -safe 0 -y -i "%s" -pix_fmt yuv420p "%s"%s',
+            concatFilePath, saveTo, report_text)
         os.execute(ffmpegCommand)
         if loopAmount > 0 then
             local loopSaveTo = string.gsub(saveTo, "(%w+)(%.%w+)$", "%1_loop%2")
-            os.execute(string.format("ffmpeg -y -stream_loop %s -i \"%s\" -c copy \"%s\"", loopAmount, saveTo,
-                loopSaveTo))
+            os.execute(string.format('ffmpeg -y -stream_loop %s -i "%s" -c copy "%s"', loopAmount, saveTo, loopSaveTo))
         end
     end
 }
