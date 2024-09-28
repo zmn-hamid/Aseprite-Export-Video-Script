@@ -4,7 +4,7 @@ This aseprite extension is for exporting animations to mp4 and mkv files.
 
 ## Important Note
 
-Unfortunately this script doesn't work if there's a non-latin character in the path of your file (for example "c:/users/احمد/output.mp4"). i have mentioned this issue in [here](https://github.com/zmn-hamid/Aseprite-Export-Video-Script/issues/2) and still haven't found a solution for it. Any help is appreciated.
+Unfortunately this script doesn't work if there's a white space or a non-latin character in the path of your file (for example "c:/users/احمد/my project/output.mp4"). i have mentioned this issue in [here](https://github.com/zmn-hamid/Aseprite-Export-Video-Script/issues/2) and still haven't found a solution for it. Any help is appreciated.
 
 ### What's new?
 
