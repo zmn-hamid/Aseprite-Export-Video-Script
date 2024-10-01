@@ -59,10 +59,22 @@ dlg:button{
         if not saveTo then
             return app.alert('choose where to save the file first')
         end
-        local firstFrameParentFolder = firstFramePath ~= '' and firstFramePath:match("(.*[/\\])") or ''
-        local saveDestination = saveTo ~= '' and saveTo:match("(.*[/\\])") or ''
+        local FramesParentFolder = firstFramePath ~= '' and
+                                       string.match(firstFramePath, "(.*" .. app.fs.pathSeparator .. ")") or ''
+        local saveToParentFolder = saveTo ~= '' and string.match(saveTo, "(.*" .. app.fs.pathSeparator .. ")") or ''
         local ffconcatContent = "ffconcat version 1.0\n"
         local sprite = app.sprite
+
+        -- check no latin character in the folder of the sample frame or saveTo
+        function isnt_safe(str)
+            -- Match any character that is not in the ASCII range (0-127)
+            return str:match("[\128-\255]") ~= nil
+        end
+        if isnt_safe(FramesParentFolder) or isnt_safe(saveToParentFolder) or isnt_safe(app.fs.fileTitle(saveTo)) then
+            app.alert("non-latin characters are only permitted for the name of the frame images. " ..
+                          "you should not put any non-latin chraacter in the folder's names or the export file name.")
+            return
+        end
 
         -- get the logging status
         local ffmpeg_log = false
@@ -72,21 +84,31 @@ dlg:button{
         end
         pcall(loadconf)
 
-        -- find concat pattern
-        local sampleFileNameEXT = string.match(firstFramePath,
-            string.format("%s([^%s]-)$", app.fs.pathSeparator, app.fs.pathSeparator))
-        local framePrefix, frameNumber, frameExtension = string.match(sampleFileNameEXT, "(%a*)(%d+)(%.%w+)")
-        local numberOfZeros = frameNumber:len()
-        local pattern = string.format('%s%%0%sd%s', framePrefix, numberOfZeros, frameExtension)
+        -- find frames files
+        local FolderFiles = app.fs.listFiles(string.match(firstFramePath, "(.*" .. app.fs.pathSeparator .. ")"))
+        local frame_images = {}
+        for _, sframe in ipairs(FolderFiles) do
+            if string.match(sframe, "%." .. app.fs.fileExtension(firstFramePath) .. "$") then
+                table.insert(frame_images, sframe)
+            end
+        end
+        table.sort(frame_images, function(a, b)
+            -- Extract the numeric part from the strings
+            local numA = tonumber(string.match(a, "%d+"))
+            local numB = tonumber(string.match(b, "%d+"))
 
-        -- Create info.ffconcat file
+            -- Compare based on the numeric part
+            return numA < numB
+        end)
+
+        -- Create _info ffconcat file
         for i, frame in ipairs(sprite.frames) do
-            local filename = app.fs.joinPath(firstFrameParentFolder, string.format(pattern, i))
+            local filename = app.fs.joinPath(FramesParentFolder, frame_images[i])
             local frameDuration = frame.duration -- Convert duration to seconds
             ffconcatContent = ffconcatContent .. string.format("file '%s'\nduration %s\n", filename, frameDuration)
         end
 
-        local concatFilePath = saveDestination .. "info.ffconcat"
+        local concatFilePath = saveToParentFolder .. "_info"
         local concatFile = io.open(concatFilePath, "w")
         concatFile:write(ffconcatContent)
         concatFile:close()
@@ -102,8 +124,10 @@ dlg:button{
             concatFilePath, saveTo, report_text)
         os.execute(ffmpegCommand)
         if loopAmount > 0 then
-            local loopSaveTo = string.gsub(saveTo, "(%w+)(%.%w+)$", "%1_loop%2")
-            os.execute(string.format('ffmpeg -y -stream_loop %s -i "%s" -c copy "%s"', loopAmount, saveTo, loopSaveTo))
+            local loopSaveTo = app.fs.filePathAndTitle(saveTo) .. '_loop' .. loopAmount + 1 .. "." ..
+                                   app.fs.fileExtension(saveTo)
+            os.execute(string.format('ffmpeg -y -stream_loop %s -i "%s" -c copy "%s"%s', loopAmount, saveTo, loopSaveTo,
+                report_text))
         end
     end
 }

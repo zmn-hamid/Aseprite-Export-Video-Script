@@ -1,6 +1,4 @@
-/temp_*.*
+/temp*
 /roadmap*
 *.ase
 *.aseprite
-/frames/
-/export/

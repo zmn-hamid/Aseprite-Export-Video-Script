@@ -2,14 +2,28 @@
 
 This aseprite extension is for exporting animations to mp4 and mkv files.
 
-## Important Note
+### Looping
 
-Unfortunately this script doesn't work if there's a white space or a non-latin character in the path of your file (for example "c:/users/احمد/my project/output.mp4"). i have mentioned this issue in [here](https://github.com/zmn-hamid/Aseprite-Export-Video-Script/issues/2) and still haven't found a solution for it. Any help is appreciated.
+- You can loop your animations as well. Example number: 2 -> playing the video twice (looping it once)
 
-### What's new?
+## UPDATE
 
-- Added option for looping. Enter a number more than 1 and the script would create a
-  new \_loop video file as well. Example: 2 equals playing the video twice (looping it once)
+With the latest update, all of the errors have been fixed and imporvements have been made:
+1) There's **no need for specific naming or choosing the first image only** anymore.
+2) **The problem with spaces, numbers and underscores have been completely fixed**
+3) **The problem with non-Latin chracters have been handled**:
+    - Unfortunately ffmpeg (the module responsible for making the animation) doesn't recognize non-ascii or non-Latin characters/letters.
+    - No folder name in the file paths are accepted if it includes non-ascii characters. If you use them, the app will alert you and wouldn't proceed.
+
+      Examples that will work:
+        - C:/Users/Hamid/Desktop/frames/فریم.png
+        - C:/Users/Hamid/Desktop/frames/خروجی.mkv
+
+      Examples that wouldn't work:
+        - C:/Users/Hamid/Desktop/فریمها/frame.png
+        - C:/Users/Hamid/Desktop/فریمها/output.mkv
+      
+      Note: If you know how to overcome this issue with FFMPEG, contact me. Unfortunately, "chcp 65001" didn't work for me.
 
 ## Prerequisite
 
@@ -17,23 +31,20 @@ Download and install **FFMPEG** on your system and add it to the Environment Var
 
 ## How to install?
 
-1. download the [Export Video file](/Export%20Video.lua)
-2. open aseprite, File > Scripts > Open Scripts Folder
-3. paste the script in the folder that's opened
+1. Download the [Export Video file](/Export%20Video.lua)
+2. Open aseprite, File > Scripts > Open Scripts Folder
+3. Paste the script in the folder that's opened
 
 ## How to use?
 
-1. open your aseprite file
-2. export the frames using the built-in export menu (to jpg or png files)
+1. Open your aseprite file
+2. Export the frames using the built-in export menu (to jpg or png files)
 3. open the script from File > Scripts > Video Export
-4. choose **THE FIRST** exported frame (e.g. `animation1.png`)
-   **CHOOSE THE FIRST ONE OR OTHERWISE YOU MAY GET A SHITTY OUTPUT**
-5. choose where to save the file, specify the name and choose one of the extensions (mkv or mp4)
-6. click "Export Video"
-7. wait a few seconds and check the folder you chose
-8. say thanks
-
-**Note**: You can make a looped animation by entering a number more than 1 in the "Loop Number" section
+4. Choose one of the frames that you just exported
+5. Choose where to save the file, specify the name and choose one of the extensions (mkv or mp4)
+6. Click "Export Video"
+7. Wait a few seconds and you're done
+8. Buy me a coffee if you will :D
 
 ## Log
 To get a log of FFMPEG (the video maker tool used for this project), copy the [conf.lua](conf.lua) file
@@ -41,4 +52,15 @@ to the same directory where your aseprite file is, so each time a ffmpeg log err
 the `true` to `false` if you want to prevent the logging (default is false, so you can remove the file too)
 
 **IMPORTANT NOTE**: Everytime you make changes to the `conf.lua` file, you gotta restart the whole app. That's
-just how it works unfortunately.
+just how Aseprite works unfortunately.
+
+# Copyright
+
+This script is free for any usage, personal or commercial. Do not share without crediting the project.
+
+## Buy me a coffee
+
+I've put so much energy into this script. I would highly appreciate it if you could donate me
+
+- USDT (BEP20): `0xF11206c2234306c55794169C3991f9e8a09063Eb`
+- USDT (ERC20): `0xF11206c2234306c55794169C3991f9e8a09063Eb`
