@@ -1,6 +1,6 @@
-# This Project Is No Longer Maintained
-
 # Export Video (MP4 and MKV) In Aseprite
+
+<b>This Project Is No Longer Maintained</b>
 
 This aseprite extension is for exporting animations to mp4 and mkv files.
 
